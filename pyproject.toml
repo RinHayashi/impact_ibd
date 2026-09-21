@@ -1,0 +1,40 @@
+[project]
+name = "impact-ibd"
+version = "0.1.0"
+description = "A Python package and interactive Streamlit app for exploring the IMPACT-IBD atlas and classifying samples with pretrained models."
+readme = "README.md"
+authors = [
+    { name = "RinHayashi", email = "ravensoch0122@gmail.com" }
+]
+requires-python = ">=3.9,<3.10"
+dependencies = [
+    "joblib==1.4.2",
+    "matplotlib==3.8.4",
+    "nbformat>=5.10.4",
+    "numpy==1.26.4",
+    "pandas==2.2.2",
+    "plotly==6.2.0",
+    "pyarrow==21.0.0",
+    "scikit-learn==1.5.1",
+    "scipy==1.13.1",
+    "seaborn==0.13.2",
+    "streamlit==1.50.0",
+    "umap-learn==0.5.7",
+]
+
+[project.scripts]
+impact-ibd-app = "impact_ibd.streamlit_app.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.26,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.31.0",
+    "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
