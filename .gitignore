@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Local scratch files
+tmp/
+
 # Local test script (not for distribution)
 homepage.png
 test_pipeline.py

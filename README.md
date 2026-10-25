@@ -4,7 +4,7 @@
   <img src="src/impact_ibd/streamlit_app/assets/logo.svg" alt="IMPACT-IBD logo" width="140">
 </p>
 
-[![Python](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
 [![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/RinHayashi/impact_ibd)
 
 A Python package providing convenient access to **IMPACT-IBD** project data and tools for **AMG (Auxiliary Metabolic Gene) module scoring** and **sample classification** using pretrained models.
@@ -57,16 +57,16 @@ We recommend the Streamlit app as the visual interface for these package feature
 
 ## Installation
 
-Requires **Python 3.9**.
+Requires **Python 3.11**.
 
 IMPACT-IBD is distributed as a wheel through GitHub Releases. A single installation provides both the Python package and the Streamlit app.
 
 ### Install from GitHub Releases
 
-Create and activate a Python 3.9 Conda environment:
+Create and activate a Python 3.11 Conda environment:
 
 ```bash
-conda create -n impact-ibd-env -c conda-forge python==3.9 pip
+conda create -n impact-ibd-env -c conda-forge python==3.11 pip
 conda activate impact-ibd-env
 ```
 
