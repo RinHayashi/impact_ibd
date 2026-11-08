@@ -158,10 +158,16 @@ def render() -> None:
             help="The first column is the unique sample ID. One sample per row, one feature per column.",
             on_change=_use_uploaded_files,
         )
+        class_list = " / ".join(map(str, defaults["classes"]))
         uploaded_metadata = st.file_uploader(
             "Upload metadata CSV (optional, for evaluation)",
             type=["csv"],
             key=f"{SS.metadata_upload}_{uploader_nonce}",
+            help=(
+                "The first column is the unique sample ID. "
+                "The grouping column must contain only the classes shown in Model summary: "
+                f"{class_list}."
+            ),
             on_change=_use_uploaded_files,
         )
         abundance_file = None

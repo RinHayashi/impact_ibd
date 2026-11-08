@@ -12,6 +12,11 @@ wheels/
 # Local scratch files
 tmp/
 
+# Local platform deployment files (not for GitHub)
+Dockerfile
+nginx.conf
+.dockerignore
+
 # Local test script (not for distribution)
 homepage.png
 test_pipeline.py
