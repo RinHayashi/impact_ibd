@@ -142,6 +142,27 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
   color: var(--ink);
 }
 
+[class*="st-key-upload_card_header"] [data-testid="stHorizontalBlock"] {
+  align-items: center;
+  flex-wrap: nowrap !important;
+}
+[class*="st-key-upload_card_header"] [data-testid="stColumn"]:first-child {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+[class*="st-key-upload_card_header"] [data-testid="stColumn"]:last-child {
+  flex: 0 0 168px !important;
+  width: 168px !important;
+  min-width: 168px;
+}
+[class*="st-key-upload_card_header"] .imibd-card-title {
+  margin: 0;
+}
+[class*="st-key-upload_card_header"] [data-testid="stElementContainer"] {
+  margin-bottom: 0;
+}
+
 .imibd-card-copy {
   margin: 0 0 12px;
   font-size: 0.92rem;

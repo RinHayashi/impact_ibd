@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
 
@@ -33,6 +35,55 @@ from impact_ibd.streamlit_app.services.validation import (
     validate_metadata,
 )
 from impact_ibd.streamlit_app.state import SS
+
+_DATA_SOURCE_BROWSE = "Browse files"
+_DATA_SOURCE_SAMPLE = "Load sample data"
+_SAMPLE_FILES = {
+    "ibd_control": ("abun_norm.csv", "meta.csv"),
+    "cd_uc": ("cd_uc/abun_norm.csv", "cd_uc/meta.csv"),
+}
+
+
+class _BytesUpload:
+    def __init__(self, data: bytes) -> None:
+        self._data = data
+
+    def getvalue(self) -> bytes:
+        return self._data
+
+
+def _test_data_dir() -> Path:
+    for parent in Path(__file__).resolve().parents:
+        candidate = parent / "test_data"
+        if candidate.is_dir():
+            return candidate
+    return Path.cwd() / "test_data"
+
+
+def _read_sample_files(task: str):
+    abundance_name, metadata_name = _SAMPLE_FILES[task]
+    root = _test_data_dir()
+    abundance_path = root / abundance_name
+    metadata_path = root / metadata_name
+    if not abundance_path.is_file() or not metadata_path.is_file():
+        return None
+    return (
+        _BytesUpload(abundance_path.read_bytes()),
+        _BytesUpload(metadata_path.read_bytes()),
+        abundance_path.relative_to(root.parent).as_posix(),
+        metadata_path.relative_to(root.parent).as_posix(),
+    )
+
+
+def _use_sample_data() -> None:
+    st.session_state[SS.model_data_source] = _DATA_SOURCE_SAMPLE
+    # File uploader values cannot be cleared through session state.
+    # A new widget key drops any previously chosen files.
+    st.session_state["_uploader_nonce"] = st.session_state.get("_uploader_nonce", 0) + 1
+
+
+def _use_uploaded_files() -> None:
+    st.session_state[SS.model_data_source] = _DATA_SOURCE_BROWSE
 
 
 def _sync_task_defaults() -> str:
@@ -87,18 +138,44 @@ def render() -> None:
 
     section_gap()
     with card("card_model_upload"):
-        card_title("2. Upload and validate data")
-        abundance_file = st.file_uploader(
+        use_sample = st.session_state.get(SS.model_data_source) == _DATA_SOURCE_SAMPLE
+        with st.container(key="upload_card_header"):
+            title_col, action_col = st.columns([1, 0.22], vertical_alignment="center")
+            with title_col:
+                card_title("2. Upload and validate data")
+            with action_col:
+                st.button(
+                    "Load sample data",
+                    on_click=_use_sample_data,
+                    width="stretch",
+                    type="primary" if use_sample else "secondary",
+                )
+        uploader_nonce = st.session_state.get("_uploader_nonce", 0)
+        uploaded_abundance = st.file_uploader(
             "Upload abundance CSV (required)",
             type=["csv"],
-            key=SS.abundance_upload,
+            key=f"{SS.abundance_upload}_{uploader_nonce}",
             help="The first column is the unique sample ID. One sample per row, one feature per column.",
+            on_change=_use_uploaded_files,
         )
-        metadata_file = st.file_uploader(
+        uploaded_metadata = st.file_uploader(
             "Upload metadata CSV (optional, for evaluation)",
             type=["csv"],
-            key=SS.metadata_upload,
+            key=f"{SS.metadata_upload}_{uploader_nonce}",
+            on_change=_use_uploaded_files,
         )
+        abundance_file = None
+        metadata_file = None
+        if use_sample:
+            loaded = _read_sample_files(task)
+            if loaded is None:
+                st.error("Sample data files were not found in test_data/.")
+            else:
+                abundance_file, metadata_file, abundance_label, metadata_label = loaded
+                st.caption(f"Loaded {abundance_label} and {metadata_label} for {TASK_LABELS[task]}.")
+        else:
+            abundance_file = uploaded_abundance
+            metadata_file = uploaded_metadata
 
     X_raw = None
     meta_df = None
@@ -152,9 +229,17 @@ def render() -> None:
     if meta_df is not None and X_raw is not None:
         default_target = defaults["target_col"]
         if default_target in target_options:
-            st.session_state.setdefault(SS.metadata_target_col, default_target)
-            if st.session_state.get(SS.metadata_target_col) not in target_options:
+            sample_marker = (task, st.session_state.get(SS.model_data_source))
+            if (
+                st.session_state.get(SS.model_data_source) == _DATA_SOURCE_SAMPLE
+                and st.session_state.get("_sample_target_applied") != sample_marker
+            ):
                 st.session_state[SS.metadata_target_col] = default_target
+                st.session_state["_sample_target_applied"] = sample_marker
+            else:
+                st.session_state.setdefault(SS.metadata_target_col, default_target)
+                if st.session_state.get(SS.metadata_target_col) not in target_options:
+                    st.session_state[SS.metadata_target_col] = default_target
 
     section_gap()
     with card("card_model_run"):
@@ -321,7 +406,10 @@ def _execute_run(
 def _render_results(task: str) -> None:
     pred = st.session_state.get(SS.model_prediction_df)
     if pred is None:
-        st.info("The model has not been run yet. Upload an abundance CSV, then click the button.")
+        if st.session_state.get(SS.model_data_source) == _DATA_SOURCE_SAMPLE:
+            st.info("Sample data is loaded. Click the button to run prediction or evaluation.")
+        else:
+            st.info("The model has not been run yet. Upload an abundance CSV, then click the button.")
         return
 
     applied = bool(st.session_state.get(SS.model_applied_tss, False))

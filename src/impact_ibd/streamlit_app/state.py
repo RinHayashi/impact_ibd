@@ -9,6 +9,7 @@ class SS:
     data_page_number = "data_page_number"
     host_atlas_color_col = "host_atlas_color_col"
     model_task = "model_task"
+    model_data_source = "model_data_source"
     abundance_upload = "abundance_upload"
     metadata_upload = "metadata_upload"
     metadata_target_col = "metadata_target_col"
