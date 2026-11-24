@@ -5,7 +5,7 @@
 </p>
 
 [![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/RinHayashi/impact_ibd)
+[![Version](https://img.shields.io/badge/version-0.1.1-green.svg)](https://github.com/RinHayashi/impact_ibd)
 
 A Python package providing convenient access to **IMPACT-IBD** project data and tools for **AMG (Auxiliary Metabolic Gene) module scoring** and **sample classification** using pretrained models.
 
@@ -14,9 +14,11 @@ A Python package providing convenient access to **IMPACT-IBD** project data and 
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
-  - [Install from GitHub Releases](#install-from-github-releases)
-  - [Use as a Python package](#use-as-a-python-package)
-  - [Run the Streamlit app](#run-the-streamlit-app)
+  - [Use the web app (recommended)](#use-the-web-app-recommended)
+  - [Install locally](#install-locally)
+    - [Install from GitHub Releases](#install-from-github-releases)
+    - [Use as a Python package](#use-as-a-python-package)
+    - [Run the Streamlit app](#run-the-streamlit-app)
 - [Quick Start](#quick-start)
   - [Load bundled IMPACT-IBD data](#1-load-bundled-impact-ibd-data)
   - [Score and classify your own samples](#2-score--classify-your-own-samples)
@@ -57,11 +59,22 @@ We recommend the Streamlit app as the visual interface for these package feature
 
 ## Installation
 
+There are two ways to use IMPACT-IBD. The hosted web app needs no installation and is the recommended way to browse the atlas and try the pretrained models. Installing the package locally is for Python or Jupyter workflows, and for running the Streamlit app on your own machine.
+
+### Use the web app (recommended)
+
+Open either site in a browser. No Python environment or download is required.
+
+- **Primary:** [https://www.biosino.org/iMAC/impact-ibd/](https://www.biosino.org/iMAC/impact-ibd/)
+- **Backup:** [https://impact-ibd.streamlit.app/](https://impact-ibd.streamlit.app/)
+
+### Install locally
+
 Requires **Python 3.11**.
 
 IMPACT-IBD is distributed as a wheel through GitHub Releases. A single installation provides both the Python package and the Streamlit app.
 
-### Install from GitHub Releases
+#### Install from GitHub Releases
 
 Create and activate a Python 3.11 Conda environment:
 
@@ -73,10 +86,10 @@ conda activate impact-ibd-env
 Install the wheel from GitHub Releases:
 
 ```bash
-python -m pip install "https://github.com/RinHayashi/impact_ibd/releases/download/v0.1.0/impact_ibd-0.1.0-py3-none-any.whl"
+python -m pip install "https://github.com/RinHayashi/impact_ibd/releases/download/v0.1.1/impact_ibd-0.1.1-py3-none-any.whl"
 ```
 
-### Use as a Python package
+#### Use as a Python package
 
 With the Conda environment activated, import the package in Python or a Jupyter notebook:
 
@@ -84,7 +97,7 @@ With the Conda environment activated, import the package in Python or a Jupyter 
 import impact_ibd as imibd
 ```
 
-### Run the Streamlit app
+#### Run the Streamlit app
 
 With the same environment activated, start the installed app:
 

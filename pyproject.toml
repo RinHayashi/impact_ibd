@@ -1,6 +1,6 @@
 [project]
 name = "impact-ibd"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python package and interactive Streamlit app for exploring the IMPACT-IBD atlas and classifying samples with pretrained models."
 readme = "README.md"
 authors = [
